@@ -6,7 +6,21 @@ declare_id!("B7oHWTujVfjuyahjLgzroVAHNphsRgTM343JQDncJFwP");
 pub mod oasis {
     use super::*;
 
-    pub fn setup_account(ctx: Context<SetupAccount>) -> Result<()> {
+    pub fn setup_account(
+        ctx: Context<SetupAccountProfile>,
+        f_name: String,
+        l_name: String,
+        p_num: String,
+        location: String,
+        user_type: UserType,
+    ) -> Result<()> {
+        let profile = &mut ctx.accounts.profile;
+
+        // Initializing the profile fields
+        profile.f_name = f_name;
+        profile.l_name = l_name;
+        profile.p_num = p_num;
+        profile.user_type = user_type;
         Ok(())
     }
 
@@ -27,8 +41,29 @@ pub mod oasis {
     }
 }
 
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
+pub enum UserType {
+    Customer,
+    MerChant,
+}
+
+#[account]
+pub struct Profile {
+    pub f_name: String,      // 20
+    pub l_name: String,      // 20
+    pub p_num: String,       // 10
+    pub location: String,    // 50
+    pub user_type: UserType, // 2
+}
+
 #[derive(Accounts)]
-pub struct SetupAccount {}
+pub struct SetupAccountProfile<'info> {
+    #[account(init, payer = user, space = 20 + 20 + 10 + 50 + 8)]
+    pub profile: Account<'info, Profile>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
 
 #[derive(Accounts)]
 pub struct CreateProduct {}
