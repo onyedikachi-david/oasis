@@ -20,6 +20,7 @@ pub mod oasis {
         profile.f_name = f_name;
         profile.l_name = l_name;
         profile.p_num = p_num;
+        profile.location = location;
         profile.user_type = user_type;
         Ok(())
     }
@@ -54,16 +55,20 @@ pub struct Profile {
     pub p_num: String,       // 10
     pub location: String,    // 50
     pub user_type: UserType, // 2
+    pub bump: u8,            // 1
 }
 
 #[derive(Accounts)]
 pub struct SetupAccountProfile<'info> {
-    #[account(init, payer = user, space = 20 + 20 + 10 + 50 + 8)]
+    #[account(init, payer = user, space = 20 + 20 + 10 + 50 + 8 +2+1, seeds = [b"user-profile", user.key().as_ref()], bump)]
     pub profile: Account<'info, Profile>,
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
+
+#[account]
+pub struct Product {}
 
 #[derive(Accounts)]
 pub struct CreateProduct {}
