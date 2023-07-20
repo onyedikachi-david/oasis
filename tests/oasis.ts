@@ -3,17 +3,18 @@ import { Program } from "@coral-xyz/anchor";
 import { Oasis } from "../target/types/oasis";
 import { expect } from "chai";
 import { PublicKey } from "@solana/web3.js";
+import { it } from "mocha";
 
 describe("oasis", () => {
   // Configure the client to use the local cluster.
   // anchor.setProvider(anchor.AnchorProvider.env());
   const provider = anchor.AnchorProvider.env();
+  // const user = (program.provider as anchor.AnchorProvider).wallet;
 
   const program = anchor.workspace.Oasis as Program<Oasis>;
+  const user = (program.provider as anchor.AnchorProvider).wallet;
 
   it("Should set up a new profile", async () => {
-    const user = (program.provider as anchor.AnchorProvider).wallet;
-
     // Set up a new profile with sample data
     const f_name = "John";
     const l_name = "Doe";
@@ -45,5 +46,34 @@ describe("oasis", () => {
     expect(profileAccount.pNum).to.eq(p_num);
     expect(profileAccount.location).to.eq(location);
     expect(profileAccount.userType).to.deep.eq({ customer: {} });
+  });
+
+  it("It should set up a new product", async () => {
+    const name = "Uziza";
+    const description = "Best vegetable to use with egusi";
+    const price = new anchor.BN(20);
+    const available_quantity = new anchor.BN(2);
+
+    const [ProductPDA, _] = await PublicKey.findProgramAddress(
+      [
+        anchor.utils.bytes.utf8.encode("user-product"),
+        Buffer.from(name),
+        provider.wallet.publicKey.toBuffer(),
+      ],
+      program.programId
+    );
+
+    // Calling the create product method
+    let newProduct = await program.methods
+      .createProduct(name, description, price, available_quantity)
+      .accounts({ product: ProductPDA, user: user.publicKey })
+      .rpc();
+
+    let newProductAccount = await program.account.product.fetch(ProductPDA);
+    console.log(newProductAccount);
+    expect(newProductAccount.name).to.eq(name);
+    expect(newProductAccount.description).to.eq(description);
+    expect(newProductAccount.price === price);
+    expect(newProductAccount.availableQuantity === available_quantity);
   });
 });

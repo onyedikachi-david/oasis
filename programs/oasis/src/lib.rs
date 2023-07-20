@@ -25,7 +25,21 @@ pub mod oasis {
         Ok(())
     }
 
-    pub fn create_product(ctx: Context<CreateProduct>) -> Result<()> {
+    pub fn create_product(
+        ctx: Context<CreateProduct>,
+        name: String,
+        description: String,
+        price: u64,
+        available_quantity: u64,
+    ) -> Result<()> {
+        let product = &mut ctx.accounts.product;
+
+        // Initializing the product fields.
+        product.name = name;
+        product.description = description;
+        product.price = price;
+        product.available_quantity = available_quantity;
+        product.owner = *ctx.accounts.user.key;
         Ok(())
     }
 
@@ -60,6 +74,7 @@ pub struct Profile {
 
 #[derive(Accounts)]
 pub struct SetupAccountProfile<'info> {
+    // Use this type for the space calculation: space = 8 + 32 + 1 + 4 + title.len() + 4 + description.len()
     #[account(init, payer = user, space = 20 + 20 + 10 + 50 + 8 +2+1, seeds = [b"user-profile", user.key().as_ref()], bump)]
     pub profile: Account<'info, Profile>,
     #[account(mut)]
@@ -74,12 +89,13 @@ pub struct Product {
     pub price: u64,
     pub available_quantity: u64,
     pub owner: Pubkey,
-    pub escrow_account: Pubkey,
+    // pub escrow_account: Pubkey,
 }
 
 #[derive(Accounts)]
+#[instruction(name: String)]
 pub struct CreateProduct<'info> {
-    #[account(init, payer = user, space = 20 + 100 + 8 + 8 + 32 + 32 +8, seeds = [b"user-product", user.key().as_ref(), ], bump )]
+    #[account(init, payer = user, space = 20 + 100 + 8 + 8 + 32 + 32 +8, seeds = [b"user-product", name.as_bytes(), user.key().as_ref(), ], bump )]
     pub product: Account<'info, Product>,
     #[account(mut)]
     pub user: Signer<'info>,
