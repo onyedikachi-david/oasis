@@ -68,10 +68,23 @@ pub struct SetupAccountProfile<'info> {
 }
 
 #[account]
-pub struct Product {}
+pub struct Product {
+    pub name: String,
+    pub description: String,
+    pub price: u64,
+    pub available_quantity: u64,
+    pub owner: Pubkey,
+    pub escrow_account: Pubkey,
+}
 
 #[derive(Accounts)]
-pub struct CreateProduct {}
+pub struct CreateProduct<'info> {
+    #[account(init, payer = user, space = 20 + 100 + 8 + 8 + 32 + 32 +8, seeds = [b"user-product", user.key().as_ref(), ], bump )]
+    pub product: Account<'info, Product>,
+    #[account(mut)]
+    pub user: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
 
 #[derive(Accounts)]
 pub struct InitiatePurchase {}
