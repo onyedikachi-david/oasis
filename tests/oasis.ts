@@ -50,12 +50,18 @@ describe("oasis", () => {
 
   it("It should set up a new product", async () => {
     for (let i = 0; i < 5; i++) {
+      // const id = i;
       const name = `Uziza ${i}`;
       const description = `Best vegetable to use with egusi ${i}`;
       const price = new anchor.BN(20);
       const available_quantity = new anchor.BN(2);
 
-      const [ProductPDA, _] = await PublicKey.findProgramAddress(
+      const [MasterPDA, _] = await PublicKey.findProgramAddress(
+        [anchor.utils.bytes.utf8.encode("master")],
+        program.programId
+      );
+
+      const [ProductPDA, __] = await PublicKey.findProgramAddress(
         [
           anchor.utils.bytes.utf8.encode("user-product"),
           Buffer.from(name),
@@ -68,7 +74,11 @@ describe("oasis", () => {
 
       let newProduct = await program.methods
         .createProduct(name, description, price, available_quantity)
-        .accounts({ product: ProductPDA, user: user.publicKey })
+        .accounts({
+          product: ProductPDA,
+          // master: MasterPDA,
+          user: user.publicKey,
+        })
         .rpc();
     }
 

@@ -39,15 +39,15 @@ pub mod oasis {
         available_quantity: u64,
     ) -> Result<()> {
         let product = &mut ctx.accounts.product;
-        let master = &mut ctx.accounts.master;
+        // let master = &mut ctx.accounts.master;
         // Initializing the product fields.
         product.name = name;
         product.description = description;
         product.price = price;
         product.available_quantity = available_quantity;
         product.owner = *ctx.accounts.user.key;
-        master.last_id += 1;
-        product.id = master.last_id;
+        // master.last_id += 1;
+        product.id += 1;
         Ok(())
     }
 
@@ -182,14 +182,14 @@ pub struct Product {
 pub struct CreateProduct<'info> {
     #[account(init, payer = user, space = 8 + 20 + 100 + 8 + 8 + 32 + 32 + 8, seeds = [b"user-product", name.as_bytes(), user.key().as_ref(), ], bump )]
     pub product: Account<'info, Product>,
-    #[account(
-        init,
-        payer = user,
-        space = 8 + 4,
-        seeds = [b"master"],
-        bump,
-    )]
-    pub master: Account<'info, Master>,
+    // #[account(
+    //     init,
+    //     payer = user,
+    //     space = 8 + 4,
+    //     seeds = [b"master"],
+    //     bump,
+    // )]
+    // pub master: Account<'info, Master>,
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
