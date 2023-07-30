@@ -5,6 +5,8 @@ import { expect } from "chai";
 import { PublicKey } from "@solana/web3.js";
 import { it } from "mocha";
 
+let masterAddrr = null;
+
 describe("oasis", () => {
   // Configure the client to use the local cluster.
   // anchor.setProvider(anchor.AnchorProvider.env());
@@ -48,18 +50,28 @@ describe("oasis", () => {
     expect(profileAccount.userType).to.deep.eq({ customer: {} });
   });
 
+  it("It should set up a master account", async () => {
+    const [CounterPDA, _] = await PublicKey.findProgramAddress(
+      [anchor.utils.bytes.utf8.encode("counter")],
+      program.programId
+    );
+    let counterAccount = await program.methods
+      .initCounter()
+      .accounts({ counter: CounterPDA, payer: user.publicKey })
+      .rpc();
+
+    let counterAccountAddr = await program.account.counter.all();
+    console.log("master address PDA: ", counterAccountAddr);
+    // masterAddrr = masterAccountAddr;
+  });
+
   it("It should set up a new product", async () => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 10; i++) {
       // const id = i;
       const name = `Uziza ${i}`;
       const description = `Best vegetable to use with egusi ${i}`;
       const price = new anchor.BN(20);
       const available_quantity = new anchor.BN(2);
-
-      const [MasterPDA, _] = await PublicKey.findProgramAddress(
-        [anchor.utils.bytes.utf8.encode("master")],
-        program.programId
-      );
 
       const [ProductPDA, __] = await PublicKey.findProgramAddress(
         [
@@ -75,15 +87,17 @@ describe("oasis", () => {
       let newProduct = await program.methods
         .createProduct(name, description, price, available_quantity)
         .accounts({
-          product: ProductPDA,
-          // master: MasterPDA,
-          user: user.publicKey,
+          // product: ProductPDA,
+          // counter: masterAddrr,
+          // user: user.publicKey,
         })
         .rpc();
     }
 
     let newProductAccount = await program.account.product.all();
     console.log(newProductAccount);
+    let counterAccountAddr = await program.account.counter.all();
+    console.log("master address PDA: ", counterAccountAddr);
     // expect(newProductAccount.name).to.eq(name);
     // expect(newProductAccount.description).to.eq(description);
     // expect(newProductAccount.price === price);

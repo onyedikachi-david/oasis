@@ -31,6 +31,10 @@ pub mod oasis {
         Ok(())
     }
 
+    pub fn init_counter(_ctx: Context<InitMaster>) -> Result<()> {
+        Ok(())
+    }
+
     pub fn create_product(
         ctx: Context<CreateProduct>,
         name: String,
@@ -39,15 +43,16 @@ pub mod oasis {
         available_quantity: u64,
     ) -> Result<()> {
         let product = &mut ctx.accounts.product;
-        // let master = &mut ctx.accounts.master;
+        let counter = &mut ctx.accounts.counter;
         // Initializing the product fields.
         product.name = name;
         product.description = description;
         product.price = price;
         product.available_quantity = available_quantity;
         product.owner = *ctx.accounts.user.key;
-        // master.last_id += 1;
-        product.id += 1;
+        counter.last_id += 1;
+        product.id = counter.last_id;
+        // product.id += 1;
         Ok(())
     }
 
@@ -130,6 +135,21 @@ pub mod oasis {
     }
 }
 
+#[derive(Accounts)]
+pub struct InitMaster<'info> {
+    #[account(
+        init,
+        payer = payer,
+        space = 8 + 4,
+        seeds = [b"counter"],
+        bump,
+    )]
+    pub counter: Account<'info, Counter>,
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq)]
 pub enum UserType {
     Customer,
@@ -182,14 +202,12 @@ pub struct Product {
 pub struct CreateProduct<'info> {
     #[account(init, payer = user, space = 8 + 20 + 100 + 8 + 8 + 32 + 32 + 8, seeds = [b"user-product", name.as_bytes(), user.key().as_ref(), ], bump )]
     pub product: Account<'info, Product>,
-    // #[account(
-    //     init,
-    //     payer = user,
-    //     space = 8 + 4,
-    //     seeds = [b"master"],
-    //     bump,
-    // )]
-    // pub master: Account<'info, Master>,
+    #[account(
+        mut,
+        seeds = [b"counter"],
+        bump,
+    )]
+    pub counter: Account<'info, Counter>,
     #[account(mut)]
     pub user: Signer<'info>,
     pub system_program: Program<'info, System>,
@@ -220,7 +238,7 @@ pub struct Escrow {
 }
 
 #[account]
-pub struct Master {
+pub struct Counter {
     pub last_id: u32,
 }
 
