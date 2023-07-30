@@ -4,8 +4,14 @@
   <strong>A decentralized application (DApp) for secure and transparent transactions on the Solana blockchain.</strong>
 </p>
 
+## Links
+* [Landing page](https://oasis.turbosite.io/)
+* [Store website](https://oasis-csr4.vercel.app/)
+
+
 ## Table of Contents
 
+- [Links](#links)
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Functionality](#functionality)
