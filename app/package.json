@@ -13,6 +13,7 @@
     "@solana/wallet-adapter-base": "^0.9.22",
     "@solana/wallet-adapter-react": "^0.15.33",
     "@solana/wallet-adapter-react-ui": "^0.9.32",
+    "@solana/wallet-adapter-wallets": "^0.19.19",
     "@web3auth/modal": "^6.1.7",
     "autoprefixer": "10.4.14",
     "eslint": "8.45.0",
