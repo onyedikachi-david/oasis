@@ -21,16 +21,9 @@ export default function Home() {
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
   return (
     <>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-          <WalletModalProvider>
-            <AppProvider>
-              <Header />
-              <Hero />
-            </AppProvider>
-          </WalletModalProvider>
-        </WalletProvider>
-      </ConnectionProvider>
+      <Header />
+
+      <Hero />
     </>
   );
 }

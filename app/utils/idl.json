@@ -5,286 +5,72 @@
     {
       "name": "setupAccount",
       "accounts": [
-        {
-          "name": "profile",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "user-profile"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "user"
-              }
-            ]
-          }
-        },
-        {
-          "name": "user",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "profile", "isMut": true, "isSigner": false },
+        { "name": "user", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": [
-        {
-          "name": "fName",
-          "type": "string"
-        },
-        {
-          "name": "lName",
-          "type": "string"
-        },
-        {
-          "name": "pNum",
-          "type": "string"
-        },
-        {
-          "name": "location",
-          "type": "string"
-        },
-        {
-          "name": "userType",
-          "type": {
-            "defined": "UserType"
-          }
-        }
+        { "name": "fName", "type": "string" },
+        { "name": "lName", "type": "string" },
+        { "name": "pNum", "type": "string" },
+        { "name": "location", "type": "string" },
+        { "name": "userType", "type": { "defined": "UserType" } }
       ]
     },
     {
-      "name": "initMaster",
+      "name": "initCounter",
       "accounts": [
-        {
-          "name": "counter",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "counter"
-              }
-            ]
-          }
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "counter", "isMut": true, "isSigner": false },
+        { "name": "payer", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": []
     },
     {
       "name": "createProduct",
       "accounts": [
-        {
-          "name": "product",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "user-product"
-              },
-              {
-                "kind": "arg",
-                "type": "string",
-                "path": "name"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "user"
-              }
-            ]
-          }
-        },
-        {
-          "name": "counter",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "counter"
-              }
-            ]
-          }
-        },
-        {
-          "name": "user",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "product", "isMut": true, "isSigner": false },
+        { "name": "counter", "isMut": true, "isSigner": false },
+        { "name": "user", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "name": "price",
-          "type": "u64"
-        },
-        {
-          "name": "availableQuantity",
-          "type": "u64"
-        }
+        { "name": "name", "type": "string" },
+        { "name": "description", "type": "string" },
+        { "name": "price", "type": "u64" },
+        { "name": "availableQuantity", "type": "u64" }
       ]
     },
     {
       "name": "initiatePurchase",
       "accounts": [
-        {
-          "name": "productEscrow",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "product_escrow"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Product",
-                "path": "product"
-              },
-              {
-                "kind": "arg",
-                "type": "u32",
-                "path": "product_id"
-              }
-            ]
-          }
-        },
-        {
-          "name": "user",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "product",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "productEscrow", "isMut": true, "isSigner": false },
+        { "name": "user", "isMut": true, "isSigner": true },
+        { "name": "product", "isMut": false, "isSigner": false },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "productId",
-          "type": "u64"
-        }
+        { "name": "amount", "type": "u64" },
+        { "name": "productId", "type": "u64" }
       ]
     },
     {
       "name": "confirmReceipt",
       "accounts": [
-        {
-          "name": "escrowPda",
-          "isMut": true,
-          "isSigner": false,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "type": "string",
-                "value": "product_escrow"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "path": "buyer"
-              },
-              {
-                "kind": "account",
-                "type": "publicKey",
-                "account": "Product",
-                "path": "product"
-              }
-            ]
-          }
-        },
-        {
-          "name": "product",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "buyer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "escrowPda", "isMut": true, "isSigner": false },
+        { "name": "product", "isMut": false, "isSigner": false },
+        { "name": "buyer", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": []
     },
     {
       "name": "withdraw",
       "accounts": [
-        {
-          "name": "escrowPda",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "product",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+        { "name": "escrowPda", "isMut": true, "isSigner": false },
+        { "name": "product", "isMut": false, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
       ],
       "args": []
     }
@@ -295,36 +81,13 @@
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "fName",
-            "type": "string"
-          },
-          {
-            "name": "lName",
-            "type": "string"
-          },
-          {
-            "name": "pNum",
-            "type": "string"
-          },
-          {
-            "name": "location",
-            "type": "string"
-          },
-          {
-            "name": "userType",
-            "type": {
-              "defined": "UserType"
-            }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          }
+          { "name": "fName", "type": "string" },
+          { "name": "lName", "type": "string" },
+          { "name": "pNum", "type": "string" },
+          { "name": "location", "type": "string" },
+          { "name": "userType", "type": { "defined": "UserType" } },
+          { "name": "bump", "type": "u8" },
+          { "name": "authority", "type": "publicKey" }
         ]
       }
     },
@@ -333,77 +96,26 @@
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "id",
-            "type": "u32"
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "name": "price",
-            "type": "u64"
-          },
-          {
-            "name": "availableQuantity",
-            "type": "u64"
-          },
-          {
-            "name": "owner",
-            "type": "publicKey"
-          }
+          { "name": "id", "type": "u32" },
+          { "name": "name", "type": "string" },
+          { "name": "description", "type": "string" },
+          { "name": "price", "type": "u64" },
+          { "name": "availableQuantity", "type": "u64" },
+          { "name": "owner", "type": "publicKey" }
         ]
       }
     },
     {
       "name": "Escrow",
-      "docs": ["Escrow account details for a product transaction."],
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "productAccount",
-            "docs": [
-              "Public key of the product account associated with the escrow."
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "productId",
-            "docs": ["Unique identifier for the product."],
-            "type": "u64"
-          },
-          {
-            "name": "sellerAccount",
-            "docs": ["Public key of the seller's account."],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "buyerAccount",
-            "docs": ["Public key of the buyer's account."],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "productAmount",
-            "docs": ["Amount of the product being transacted."],
-            "type": "u64"
-          },
-          {
-            "name": "stage",
-            "docs": ["Stage of the escrow transaction."],
-            "type": {
-              "defined": "Stage"
-            }
-          }
+          { "name": "productAccount", "type": "publicKey" },
+          { "name": "productId", "type": "u64" },
+          { "name": "sellerAccount", "type": { "option": "publicKey" } },
+          { "name": "buyerAccount", "type": { "option": "publicKey" } },
+          { "name": "productAmount", "type": "u64" },
+          { "name": "stage", "type": { "defined": "Stage" } }
         ]
       }
     },
@@ -411,12 +123,7 @@
       "name": "Counter",
       "type": {
         "kind": "struct",
-        "fields": [
-          {
-            "name": "lastId",
-            "type": "u32"
-          }
-        ]
+        "fields": [{ "name": "lastId", "type": "u32" }]
       }
     }
   ],
@@ -425,14 +132,7 @@
       "name": "UserType",
       "type": {
         "kind": "enum",
-        "variants": [
-          {
-            "name": "Customer"
-          },
-          {
-            "name": "MerChant"
-          }
-        ]
+        "variants": [{ "name": "Customer" }, { "name": "MerChant" }]
       }
     },
     {
@@ -440,15 +140,9 @@
       "type": {
         "kind": "enum",
         "variants": [
-          {
-            "name": "Initiated"
-          },
-          {
-            "name": "AwaitingConfirmation"
-          },
-          {
-            "name": "Completed"
-          }
+          { "name": "Initiated" },
+          { "name": "AwaitingConfirmation" },
+          { "name": "Completed" }
         ]
       }
     }
@@ -464,18 +158,11 @@
       "name": "InvalidWithdrawAmount",
       "msg": "Insufficient amount to withdraw."
     },
-    {
-      "code": 6002,
-      "name": "InvalidStage",
-      "msg": "Wrong stage."
-    },
+    { "code": 6002, "name": "InvalidStage", "msg": "Wrong stage." },
     {
       "code": 6003,
       "name": "InvalidBuyer",
       "msg": "Insufficient amount to withdraw."
     }
-  ],
-  "metadata": {
-    "address": "B7oHWTujVfjuyahjLgzroVAHNphsRgTM343JQDncJFwP"
-  }
+  ]
 }

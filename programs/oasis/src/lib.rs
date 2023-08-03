@@ -5,12 +5,30 @@ use anchor_lang::{
     solana_program::{clock::Clock, hash::hash, program::invoke, system_instruction::transfer},
 };
 
-declare_id!("B7oHWTujVfjuyahjLgzroVAHNphsRgTM343JQDncJFwP");
+declare_id!("ARG2PKVAXGAwLJHqBDojnwk3A2HgsL4H8CBPSwwahPL");
 
 #[program]
 pub mod oasis {
     use super::*;
-
+    /// Initializes a new user profile account.
+    ///
+    /// # Arguments
+    ///
+    /// * `ctx` - Context object containing accounts and other metadata.
+    /// * `f_name` - User's first name.  
+    /// * `l_name` - User's last name.
+    /// * `p_num` - User's phone number.
+    /// * `location` - User's location.
+    /// * `user_type` - User type (Customer or Merchant).
+    ///
+    /// # Accounts  
+    ///
+    /// * `profile` - New Profile account to initialize.
+    /// * `user` - Account of the user initializing the profile.
+    /// * `system_program` - System program for account creation.
+    ///
+    /// Initializes a new Profile account with the provided parameters.
+    /// The Profile account is marked as owned by the initializing user.
     pub fn setup_account(
         ctx: Context<SetupAccountProfile>,
         f_name: String,
@@ -30,10 +48,33 @@ pub mod oasis {
         profile.authority = ctx.accounts.user.key();
         Ok(())
     }
-
+    /// Initializes the counter account.
+    ///
+    /// Accounts:  
+    /// - counter: Counter account to initialize.
+    /// - payer: Account paying for initialization.
+    /// - system_program: System program.
+    ///
+    //
     pub fn init_counter(_ctx: Context<InitMaster>) -> Result<()> {
         Ok(())
     }
+    /// Initializes a new product account.
+    ///
+    /// Parameters:
+    /// - name: Name of the product.
+    /// - description: Description of the product.
+    /// - price: Price of the product.
+    /// - available_quantity: Available quantity for sale.  
+    ///
+    /// Accounts:
+    /// - product: New product account to initialize.
+    /// - counter: Counter account to increment.
+    /// - user: User account creating the product listing.
+    ///
+    /// Initializes a new product account with provided parameters.
+    /// Increments the counter to generate a new ID, and sets the owner
+    /// to the initializing user.
 
     pub fn create_product(
         ctx: Context<CreateProduct>,
@@ -56,7 +97,19 @@ pub mod oasis {
         Ok(())
     }
 
-    // Instruction to initiate a purchase and create an escrow account
+    /// Initiates a new purchase and creates an escrow account.
+    ///
+    /// Parameters:
+    /// - amount: Amount of tokens to transfer into escrow.
+    /// - product_id: Unique ID of the product being purchased.
+    ///
+    /// Accounts:
+    /// - product_escrow: New escrow account to create.
+    /// - user: Buyer account initiating purchase.
+    /// - product: Product account being purchased.
+    ///
+    /// Transfers tokens from buyer into a new escrow account.
+    /// Updates escrow with purchase details.
     pub fn initiate_purchase(
         ctx: Context<InitiatePurchase>,
         amount: u64,
@@ -86,7 +139,15 @@ pub mod oasis {
         Ok(())
     }
 
-    // Instruction for the buyer to confirm receipt of goods and release funds to the merchant
+    /// Allows buyer to confirm receipt and release escrowed funds.  
+    ///
+    /// Accounts:
+    /// - escrow_pda: Escrow account to update.
+    /// - buyer: Buyer account confirming receipt.
+    /// - product: Product account associated with escrow.
+    ///
+    /// Checks escrow stage and buyer match. If valid, releases
+    /// escrow funds by marking stage as completed.
     pub fn confirm_receipt(ctx: Context<ConfirmReceipt>) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_pda;
         let buyer = &ctx.accounts.buyer.to_account_info();
@@ -108,6 +169,15 @@ pub mod oasis {
         Ok(())
     }
 
+    /// Allows merchant to withdraw funds from the escrow account.
+    ///
+    /// Accounts:  
+    /// - escrow_pda: Escrow account to withdraw from.
+    /// - authority: Merchant account to withdraw funds.
+    /// - product: Product account associated with escrow.
+    ///
+    /// Verifies merchant owns product, transfers escrowed
+    /// funds to merchant account.
     // Instruction for the merchant to withdraw
     pub fn withdraw(ctx: Context<Withdraw>) -> Result<()> {
         let escrow_pda = &ctx.accounts.escrow_pda;

@@ -1,14 +1,14 @@
 [features]
 seeds = true
 skip-lint = false
-[programs.localnet]
-oasis = "B7oHWTujVfjuyahjLgzroVAHNphsRgTM343JQDncJFwP"
+[programs.devnet]
+oasis = "ARG2PKVAXGAwLJHqBDojnwk3A2HgsL4H8CBPSwwahPL"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "/home/david/.config/solana/id.json"
 
 [scripts]

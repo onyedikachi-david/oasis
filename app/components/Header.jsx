@@ -1,70 +1,97 @@
-import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { AiOutlineSearch } from "react-icons/ai";
-import { CgProfile } from "react-icons/cg";
-import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+require("@solana/wallet-adapter-react-ui/styles.css");
+import dynamic from "next/dynamic";
 
-const style = {
-  wrapper: `bg-[#04111d] w-screen px-[1.2rem] py-[0.8rem] flex `,
-  logoContainer: `flex items-center cursor-pointer`,
-  logoText: ` ml-[0.8rem] text-white font-semibold text-2xl`,
-  searchBar: `flex flex-1 mx-[0.8rem] w-max-[520px] items-center bg-[#363840] rounded-[0.8rem] hover:bg-[#4c505c]`,
-  searchIcon: `text-[#8a939b] mx-3 font-bold text-lg`,
-  searchInput: `h-[2.6rem] w-full border-0 bg-transparent outline-0 ring-0 px-2 pl-0 text-[#e6e8eb] placeholder:text-[#8a939b]`,
-  headerItems: ` flex items-center justify-end sm:flex `,
-  headerItem: `text-white px-4 font-bold text-[#c8cacd] hover:text-white cursor-pointer`,
-  headerIcon: `text-[#8a939b] text-3xl font-black px-4 hover:text-white cursor-pointer  `,
-};
+const WalletMultiButtonDynamic = dynamic(
+  async () =>
+    (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
+  { ssr: false }
+);
 
-// import { Web3Auth } from "@web3auth/modal";
-
-// //Initialize within your constructor
-// const web3auth = new Web3Auth({
-//   clientId: "YOUR_WEB3AUTH_CLIENT_ID", // Get your Client ID from Web3Auth Dashboard
-//   chainConfig: {
-//     chainNamespace: "solana",
-//     chainId: "0x1", // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
-//     rpcTarget: "https://api.devnet.solana.com", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-//   },
-// });
-
-// await web3auth.initModal();
-
-const Header = (address) => {
+export default function Navbar(props) {
+  const [navbarOpen, setNavbarOpen] = React.useState(false);
   return (
-    <div className={style.wrapper}>
-      <Link href="/">
-        <div className={style.logoContainer}>
-          <div className={style.logoText}>Oasis</div>
+    <>
+      <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <a href="https://flowbite.com/" class="flex items-center">
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              Home
+            </span>
+          </a>
+          <button
+            data-collapse-toggle="navbar-default"
+            type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="navbar-default"
+            aria-expanded="false"
+          >
+            <span class="sr-only">Open main menu</span>
+            <svg
+              class="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
+          <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+              <li>
+                <a
+                  href="/profile"
+                  class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                  aria-current="page"
+                >
+                  Profile
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/create-product"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Create product
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  View products
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  About
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Contact
+                </a>
+              </li>
+              <WalletMultiButtonDynamic />
+            </ul>
+          </div>
         </div>
-      </Link>
-      <div className={style.searchBar}>
-        <div className={style.searchIcon}>
-          <AiOutlineSearch />
-        </div>
-        <input
-          className={style.searchInput}
-          placeholder={`connected wallet address: ${address.address}`}
-        />
-      </div>
-      <div className={style.headerItems}>
-        <Link href="#">
-          <div className={style.headerItem}> Store </div>
-        </Link>
-
-        <div className={style.headerIcon}>
-          <CgProfile />
-        </div>
-        {/* <div className={style.headerIcon}> */}
-        {/* <MdOutlineAccountBalanceWallet /> */}
-        <WalletMultiButton />
-
-        {/* </div> */}
-      </div>
-    </div>
+      </nav>
+    </>
   );
-};
-
-export default Header;
+}
